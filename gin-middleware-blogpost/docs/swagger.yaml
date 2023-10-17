@@ -1,0 +1,279 @@
+basePath: /
+definitions:
+  controller.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  controller.SuccessResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  entity.Blog:
+    properties:
+      authorID:
+        type: integer
+      id:
+        type: integer
+      postBody:
+        type: string
+      postTittle:
+        type: string
+    type: object
+  entity.BlogInput:
+    properties:
+      post_body:
+        type: string
+      post_id:
+        type: integer
+      post_title:
+        type: string
+    type: object
+  entity.SignInInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  entity.User:
+    properties:
+      admin:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  entity.UserInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server that manages tasks.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Blog website
+  version: "1.0"
+paths:
+  /action/create/post:
+    post:
+      consumes:
+      - application/json
+      description: Create new post
+      parameters:
+      - description: enter your credentials
+        in: body
+        name: blog
+        required: true
+        schema:
+          $ref: '#/definitions/entity.BlogInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create post
+      tags:
+      - posts
+  /action/delete/post/{post_id}:
+    post:
+      description: Delete one post
+      parameters:
+      - description: Post id
+        in: path
+        name: post_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete post
+      tags:
+      - posts
+  /action/edit/post:
+    post:
+      consumes:
+      - application/json
+      description: Edit post
+      parameters:
+      - description: Post to update
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/entity.BlogInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Edit post
+      tags:
+      - posts
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Login an exist account
+      parameters:
+      - description: enter your credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.SignInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      summary: Sign in
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: user details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UserInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controller.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      summary: Sign-up
+      tags:
+      - auth
+  /posts:
+    get:
+      description: get all posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.Blog'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      summary: Get posts
+      tags:
+      - posts
+  /posts/{post_id}:
+    get:
+      consumes:
+      - application/json
+      description: get post by id
+      parameters:
+      - description: Post id
+        in: path
+        name: post_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Blog'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      summary: Get post
+      tags:
+      - posts
+  /users:
+    get:
+      description: Get list of all users from db
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entity.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      summary: Get users
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

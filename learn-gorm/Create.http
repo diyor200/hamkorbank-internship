@@ -1,0 +1,28 @@
+### Create User
+POST localhost:8080/create
+Content-Type: application/json
+
+{
+  "username": "Alisher",
+  "email": "alisher@gmail.com",
+  "password": "12qwew",
+  "phone": "1234567"
+}
+
+
+### Get Users
+GET localhost:8080/users
+
+
+### Update users
+POST localhost:8080/update
+Content-Type: application/json
+
+{
+  "username": "ChangedName",
+  "password": "changedPassword",
+  "email": "alex@gmail.com"
+}
+
+### Delete user
+POST localhost:8080/delete/3

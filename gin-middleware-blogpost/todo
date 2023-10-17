@@ -1,0 +1,14 @@
+users who not logged in can only see all post and one by one.
+users logged in can see all posts and can post their blogs and can update it: maybe update or delete
+admins do anything
+
+
+Sources:
+    - framework: gin
+    - db management system gorm or sqlx
+    - for auth i need to use middleware
+
+Plan:
+    - auth system with jwt authorization
+    - check user: not logged in, logged in or admin
+    - specify endpoints
