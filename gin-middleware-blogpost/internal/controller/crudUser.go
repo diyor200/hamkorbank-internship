@@ -2,12 +2,15 @@ package controller
 
 import (
 	"errors"
-	"github.com/diyor200/gin-middleware-blogpost/internal/entity"
-	"github.com/diyor200/gin-middleware-blogpost/pkg/hash"
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/diyor200/gin-middleware-blogpost/internal/entity"
+	"github.com/diyor200/gin-middleware-blogpost/pkg/hash"
+	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // @Summary Sign-up
@@ -63,6 +66,9 @@ func (c *Controller) SignIn(ctx *gin.Context) {
 		return
 	}
 	input.Password = hash.Hash(input.Password)
+	log.Println(input.Password)
+	err = bcrypt.CompareHashAndPassword([]byte(input.Password), []byte(user.Password))
+	fmt.Println(err)
 	if user.Password != input.Password {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "bcrypt.CompareHashAndPassword: invalid email or password"})
 		return

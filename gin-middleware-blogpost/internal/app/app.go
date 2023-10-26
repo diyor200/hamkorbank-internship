@@ -47,7 +47,7 @@ func Run() {
 	}
 	actions.POST("/edit/post", c.EditPost)
 
-	if err := router.Run(":8080"); err != nil {
+	if err := router.Run(":8083"); err != nil {
 		panic(err)
 	}
 }

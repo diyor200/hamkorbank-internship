@@ -2,19 +2,23 @@ package config
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
 	DBUrl string
 }
 
-var (
-	JwtAccessKey = os.Getenv("JWT_SIGN_KEY")
-	JwtSecret    = os.Getenv("PASSWORD_SALT")
-)
+// var (
+//
+//	JwtAccessKey = os.Getenv("JWT_SIGN_KEY")
+//	JwtSecret    = os.Getenv("PASSWORD_SALT")
+//
+// )
+const PasswordSalt = "diyorbek"
 
 func NewConfig() *Config {
 	err := godotenv.Load()
