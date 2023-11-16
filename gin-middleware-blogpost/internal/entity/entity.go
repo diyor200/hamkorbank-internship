@@ -1,18 +1,18 @@
 package entity
 
 type User struct {
-	Id       int    `db:"id"`
-	Username string `db:"username"`
-	Password string `db:"password"`
-	Email    string `db:"email"`
-	Admin    int    `db:"isadmin"`
+	Id       int    `db:"ID"`
+	Username string `db:"USERNAME"`
+	Password string `db:"PASSWORD"`
+	Email    string `db:"EMAIL"`
+	Admin    string `db:"ISADMIN"`
 }
 
 type Blog struct {
-	Id         int    `db:"id"`
-	AuthorID   int    `db:"user_id"`
-	PostTittle string `db:"post_title"`
-	PostBody   string `db:"post_body"`
+	Id         int    `db:"ID"`
+	AuthorID   int    `db:"USER_ID"`
+	PostTittle string `db:"POST_TITLE"`
+	PostBody   string `db:"POST_BODY"`
 }
 
 type UserInput struct {
@@ -27,7 +27,6 @@ type SignInInput struct {
 }
 
 type BlogInput struct {
-	PostID     int    `json:"post_id"`
 	PostTittle string `json:"post_title"`
 	PostBody   string `json:"post_body"`
 }

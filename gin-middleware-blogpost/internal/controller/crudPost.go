@@ -100,6 +100,10 @@ func (c *Controller) GetPost(ctx *gin.Context) {
 func (c *Controller) EditPost(ctx *gin.Context) {
 	var input entity.BlogInput
 	var err error
+	postId, err := strconv.Atoi(ctx.Param("post_id"))
+	if err != nil {
+		errorResponse(ctx, 404, err)
+	}
 	userId, ok := ctx.Get("user_id")
 	fmt.Println("EditPost userId = ", userId)
 	if !ok {
@@ -111,7 +115,7 @@ func (c *Controller) EditPost(ctx *gin.Context) {
 		return
 	}
 
-	err = c.r.EditPost(input, userId.(int))
+	err = c.r.EditPost(input, userId.(int), postId)
 	log.Println("err = c.r.EditPost(input, userId.(int)) = ", err)
 	if err != nil {
 		errorResponse(ctx, http.StatusUnauthorized, err)

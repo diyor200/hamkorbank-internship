@@ -12,12 +12,6 @@ type Config struct {
 	DBUrl string
 }
 
-// var (
-//
-//	JwtAccessKey = os.Getenv("JWT_SIGN_KEY")
-//	JwtSecret    = os.Getenv("PASSWORD_SALT")
-//
-// )
 const PasswordSalt = "diyorbek"
 
 func NewConfig() *Config {
@@ -32,6 +26,8 @@ func NewConfig() *Config {
 	port := os.Getenv("DB_PORT")
 	host := os.Getenv("DB_HOST")
 	//postgres://postgres:2001@localhost:5432/postgres?sslmode=disable
-	cfg.DBUrl = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, pass, host, port, name)
+	//cfg.DBUrl = fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", user, pass, host, port, name) for postgres
+	cfg.DBUrl = fmt.Sprintf(`user="%s" password="%s" connectString="%s:%s/%s"
+					   libDir="C:\\Oracle\\instantclient_21_12\\bin"`, user, pass, host, port, name)
 	return cfg
 }

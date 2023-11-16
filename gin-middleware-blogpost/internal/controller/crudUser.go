@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,7 +9,6 @@ import (
 	"github.com/diyor200/gin-middleware-blogpost/internal/entity"
 	"github.com/diyor200/gin-middleware-blogpost/pkg/hash"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // @Summary Sign-up
@@ -31,7 +29,7 @@ func (c *Controller) SignUp(ctx *gin.Context) {
 	input.Password = hash.Hash(input.Password)
 	err := c.r.CreateUser(input)
 	if err != nil {
-		errorResponse(ctx, http.StatusBadRequest, errors.New("user already exists"))
+		errorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
 	ctx.JSON(http.StatusCreated, gin.H{"message": "successfully created"})
@@ -67,10 +65,8 @@ func (c *Controller) SignIn(ctx *gin.Context) {
 	}
 	input.Password = hash.Hash(input.Password)
 	log.Println(input.Password)
-	err = bcrypt.CompareHashAndPassword([]byte(input.Password), []byte(user.Password))
-	fmt.Println(err)
 	if user.Password != input.Password {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "bcrypt.CompareHashAndPassword: invalid email or password"})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid email or password"})
 		return
 	}
 
@@ -92,10 +88,16 @@ func (c *Controller) SignIn(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse
 // @Router /users [GET]
 func (c *Controller) GetUsers(ctx *gin.Context) {
+	userId, ok := ctx.Get("user_id")
+	fmt.Println("GetUsers userId = ", userId)
+	if !ok {
+		errorResponse(ctx, http.StatusUnauthorized, ErrUnauthorized)
+		return
+	}
 	var users []entity.User
-	users, err := c.r.GetUsers()
+	users, err := c.r.GetUsers(userId.(int))
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(200, &users)
