@@ -18,7 +18,7 @@ func init() {
 	}
 }
 
-// Generate jwt-token
+// GenerateToken generates jwt token
 func GenerateToken(userID int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Subject:   fmt.Sprintf("%d", userID),

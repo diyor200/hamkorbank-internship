@@ -95,7 +95,7 @@ func (r *Repo) EditPost(input entity.BlogInput, userID, postID int) error {
 		if len(blog) == 0 {
 			return errors.New("not exists")
 		}
-		_, err = r.DB.Exec("UPDATE posts SET post_title=:1, post_body=:2 WHERE id=:3",
+		_, err = r.DB.Exec("begin UPDATE posts SET post_title=:1, post_body=:2 WHERE id=:3;commit; end;",
 			input.PostTittle, input.PostBody, postID)
 		return err
 	}
@@ -104,7 +104,7 @@ func (r *Repo) EditPost(input entity.BlogInput, userID, postID int) error {
 	if len(blog) == 0 {
 		return errors.New("not exists")
 	}
-	_, err = r.DB.Exec("UPDATE posts SET post_title=:1, post_body=:2 WHERE id=:3 and user_id=:4",
+	_, err = r.DB.Exec("begin UPDATE posts SET post_title=:1, post_body=:2 WHERE id=:3 and user_id=:4;commit;end;",
 		input.PostTittle, input.PostBody, postID, userID)
 	return err
 }
