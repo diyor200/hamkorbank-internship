@@ -99,5 +99,6 @@ func (r *Repository) InsertToken(t *entity.Token) {
 }
 
 func (r *Repository) UpdateToken(token *entity.Token) {
-	r.db.MustExec("UPDATE tokens set token=$1 and expires_at=$2", token.TokenName, token.ExpiresAt)
+	res, err := r.db.Exec("UPDATE tokens set token=$1 and expires_at=$2", token.TokenName, token.ExpiresAt)
+	fmt.Println(err, res)
 }
